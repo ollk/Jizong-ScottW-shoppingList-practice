@@ -45,7 +45,7 @@ function renderShoppingList() {
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding "${itemName}" to shopping list`);
-  STORE.push({id: cuid(), name: itemName, checked: false});
+  STORE.push({name: itemName, checked: false});
 }
 
 function handleNewItemSubmit() {
@@ -59,25 +59,10 @@ function handleNewItemSubmit() {
   });
 }
 
-function toggleCheckedForListItem(itemId) {
-  console.log("Toggling checked property for item with id " + itemId);
-  const item = STORE.find(item => item.id === itemId);
-  item.checked = !item.checked;
-}
-
-
-function getItemIdFromElement(item) {
-  return $(item)
-    .closest('li')
-    .data('item-id');
-}
 
 function handleItemCheckClicked() {
   $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
     console.log('`handleItemCheckClicked` ran');
-    const id = getItemIdFromElement(event.currentTarget);
-    toggleCheckedForListItem(id);
-    renderShoppingList();
   });
 }
 
