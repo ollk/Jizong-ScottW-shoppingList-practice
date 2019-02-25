@@ -8,10 +8,22 @@ const STORE = [
 ];
 
 
+function generateShoppingItemsString(shoppingList) {
+  console.log("Generating shopping list element");
+
+  return `
+    <li>apples</li>
+    <li>oranges</li>
+    <li>milk</li>
+    <li>bread</li>
+  `;
+}
+
+
 function renderShoppingList() {
   // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = '<li>apples</li>';
+  const shoppingListItemsString = generateShoppingItemsString(STORE);
 
   // insert that HTML into the DOM
   $('.js-shopping-list').html(shoppingListItemsString);
