@@ -1,22 +1,35 @@
 'use strict';
 
 const STORE = [
-  {name: "apples", checked: false},
-  {name: "oranges", checked: false},
-  {name: "milk", checked: true},
-  {name: "bread", checked: false}
+  {id: cuid(), name: "apples", checked: false},
+  {id: cuid(), name: "oranges", checked: false},
+  {id: cuid(), name: "milk", checked: true},
+  {id: cuid(), name: "bread", checked: false}
 ];
+
+
+function generateItemElement(item) {
+  return `
+    <li data-item-id="${item.id}">
+      <span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
+      <div class="shopping-item-controls">
+        <button class="shopping-item-toggle js-item-toggle">
+            <span class="button-label">check</span>
+        </button>
+        <button class="shopping-item-delete js-item-delete">
+            <span class="button-label">delete</span>
+        </button>
+      </div>
+    </li>`;
+}
 
 
 function generateShoppingItemsString(shoppingList) {
   console.log("Generating shopping list element");
 
-  return `
-    <li>apples</li>
-    <li>oranges</li>
-    <li>milk</li>
-    <li>bread</li>
-  `;
+  const items = shoppingList.map((item) => generateItemElement(item));
+  
+  return items.join("");
 }
 
 
@@ -29,17 +42,24 @@ function renderShoppingList() {
   $('.js-shopping-list').html(shoppingListItemsString);
 }
 
+function addItemToStore(name) {
+  STORE.push({id: cuid(), name: name, checked: false});
+}
 
 function handleNewItemSubmit() {
-  // this function will be responsible for when users add a new shopping list item
-  console.log('`handleNewItemSubmit` ran');
+  $('#js-shopping-list-form').submit(function(event) {
+    event.preventDefault();
+    const newItemName = $('.js-shopping-list-entry').val();
+    console.log(newItemName);
+    $('.js-shopping-list-entry').val('');
+    addItemToStore(newItemName);
+    renderShoppingList();
+  });
 }
 
 
 function handleItemCheckClicked() {
-  // this function will be responsible for when users click the "check" button on
-  // a shopping list item.
-  console.log('`handleItemCheckClicked` ran');
+ 
 }
 
 
@@ -58,7 +78,6 @@ function handleShoppingList() {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
-
 }
 
 // when the page loads, call `handleShoppingList`
