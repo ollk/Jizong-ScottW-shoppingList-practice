@@ -57,16 +57,30 @@ function handleNewItemSubmit() {
   });
 }
 
-
-function handleItemCheckClicked() {
- 
+function toggleItemCheckStatus(id) {
+  let foundItem = STORE.find(item => item.id === id );
+  foundItem.checked = !foundItem.checked;
 }
 
+function handleItemCheckClicked() {
+  $('.js-shopping-list').on('click', '.js-item-toggle', function(event) {
+    let itemId = $(this).closest('li').data('item-id');
+    toggleItemCheckStatus(itemId);
+    renderShoppingList();
+  });
+}
+
+function deleteItem(id) {
+  let foundItemIndex = STORE.findIndex(item => item.id === id);
+  STORE.splice(foundItemIndex, 1);
+}
 
 function handleDeleteItemClicked() {
-  // this function will be responsible for when users want to delete a shopping list
-  // item
-  console.log('`handleDeleteItemClicked` ran')
+  $('.js-shopping-list').on('click', '.js-item-delete', function(event) {
+    let itemId = $(this).closest('li').data('item-id');
+    deleteItem(itemId);
+    renderShoppingList();
+  });
 }
 
 // this function will be our callback when the page loads. it's responsible for
