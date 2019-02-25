@@ -1,12 +1,16 @@
 'use strict';
 /*global cuid*/
 
-const STORE = [
-  {id: cuid(), name: 'apples', checked: false},
-  {id: cuid(), name: 'oranges', checked: false},
-  {id: cuid(), name: 'milk', checked: true},
-  {id: cuid(), name: 'bread', checked: false}
-];
+const STORE = {
+  items: [
+    {id: cuid(), name: 'apples', checked: false},
+    {id: cuid(), name: 'oranges', checked: false},
+    {id: cuid(), name: 'milk', checked: true},
+    {id: cuid(), name: 'bread', checked: false}
+  ],
+  hideCompleted: false,
+};
+
 
 function generateItemElement(item) {
   return `
@@ -29,12 +33,16 @@ function generateShoppingItemsString(shoppingList) {
 }
 
 function renderShoppingList() {
-  const shoppingListItemsString = generateShoppingItemsString(STORE);
+  let filteredItems = STORE.items;
+  if (STORE.hideCompleted) {
+    filteredItems = filteredItems.filter(item => !item.checked);
+  }
+  const shoppingListItemsString = generateShoppingItemsString(filteredItems);
   $('.js-shopping-list').html(shoppingListItemsString);
 }
 
 function addItemToStore(name) {
-  return STORE.push({id: cuid(), name: name, checked: false});
+  return STORE.items.push({id: cuid(), name: name, checked: false});
 }
 
 function handleNewItemSubmit() {
@@ -48,7 +56,7 @@ function handleNewItemSubmit() {
 }
 
 function toggleItemCheckStatus(id) {
-  let foundItem = STORE.find(item => item.id === id );
+  let foundItem = STORE.items.find(item => item.id === id );
   foundItem.checked = !foundItem.checked;
 }
 
@@ -61,8 +69,8 @@ function handleItemCheckClicked() {
 }
 
 function deleteItem(id) {
-  let foundItemIndex = STORE.findIndex(item => item.id === id);
-  STORE.splice(foundItemIndex, 1);
+  let foundItemIndex = STORE.items.findIndex(item => item.id === id);
+  STORE.items.splice(foundItemIndex, 1);
 }
 
 function handleDeleteItemClicked() {
@@ -73,11 +81,23 @@ function handleDeleteItemClicked() {
   });
 }
 
+function toggleHideFilter() {
+  STORE.hideCompleted = !STORE.hideCompleted;
+}
+
+function handleToggleHideFilter() {
+  $('.js-hide-completed-toggle').click(function(){
+    toggleHideFilter();
+    renderShoppingList();
+  });
+}
+
 function handleShoppingList() {
   renderShoppingList();
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
+  handleToggleHideFilter();
 }
 
 $(handleShoppingList);
