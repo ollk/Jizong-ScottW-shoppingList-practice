@@ -1,14 +1,5 @@
 'use strict';
 
-// `STORE` is responsible for storing the underlying data
-// that our app needs to keep track of in order to work.
-//
-// for a shopping list, our data model is pretty simple.
-// we just have an array of shopping list items. each one
-// is an object with a `name` and a `checked` property that
-// indicates if it's checked off or not.
-// we're pre-adding items to the shopping list so there's
-// something to see when the page first loads.
 const STORE = [
   {name: "apples", checked: false},
   {name: "oranges", checked: false},
@@ -18,9 +9,12 @@ const STORE = [
 
 
 function renderShoppingList() {
-  // this function will be responsible for rendering the shopping list in
-  // the DOM
+  // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
+  const shoppingListItemsString = '<li>apples</li>';
+
+  // insert that HTML into the DOM
+  $('.js-shopping-list').html(shoppingListItemsString);
 }
 
 
