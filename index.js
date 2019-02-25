@@ -1,69 +1,39 @@
 'use strict';
 
+// `STORE` is responsible for storing the underlying data
+// that our app needs to keep track of in order to work.
+//
+// for a shopping list, our data model is pretty simple.
+// we just have an array of shopping list items. each one
+// is an object with a `name` and a `checked` property that
+// indicates if it's checked off or not.
+// we're pre-adding items to the shopping list so there's
+// something to see when the page first loads.
 const STORE = [
-  {id: cuid(), name: "apples", checked: false},
-  {id: cuid(), name: "oranges", checked: false},
-  {id: cuid(), name: "milk", checked: true},
-  {id: cuid(), name: "bread", checked: false}
+  {name: "apples", checked: false},
+  {name: "oranges", checked: false},
+  {name: "milk", checked: true},
+  {name: "bread", checked: false}
 ];
 
 
-function generateItemElement(item) {
-  return `
-    <li data-item-id="${item.id}">
-      <span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
-      <div class="shopping-item-controls">
-        <button class="shopping-item-toggle js-item-toggle">
-            <span class="button-label">check</span>
-        </button>
-        <button class="shopping-item-delete js-item-delete">
-            <span class="button-label">delete</span>
-        </button>
-      </div>
-    </li>`;
-}
-
-
-function generateShoppingItemsString(shoppingList) {
-  console.log("Generating shopping list element");
-
-  const items = shoppingList.map((item) => generateItemElement(item));
-  
-  return items.join("");
-}
-
-
 function renderShoppingList() {
-  // render the shopping list in the DOM
+  // this function will be responsible for rendering the shopping list in
+  // the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = generateShoppingItemsString(STORE);
-
-  // insert that HTML into the DOM
-  $('.js-shopping-list').html(shoppingListItemsString);
 }
 
-
-function addItemToShoppingList(itemName) {
-  console.log(`Adding "${itemName}" to shopping list`);
-  STORE.push({name: itemName, checked: false});
-}
 
 function handleNewItemSubmit() {
-  $('#js-shopping-list-form').submit(function(event) {
-    event.preventDefault();
-    console.log('`handleNewItemSubmit` ran');
-    const newItemName = $('.js-shopping-list-entry').val();
-    $('.js-shopping-list-entry').val('');
-    addItemToShoppingList(newItemName);
-    renderShoppingList();
-  });
+  // this function will be responsible for when users add a new shopping list item
+  console.log('`handleNewItemSubmit` ran');
 }
 
 
 function handleItemCheckClicked() {
-  $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
-    console.log('`handleItemCheckClicked` ran');
-  });
+  // this function will be responsible for when users click the "check" button on
+  // a shopping list item.
+  console.log('`handleItemCheckClicked` ran');
 }
 
 
@@ -82,6 +52,7 @@ function handleShoppingList() {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
+
 }
 
 // when the page loads, call `handleShoppingList`
