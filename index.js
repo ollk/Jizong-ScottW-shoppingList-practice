@@ -3,10 +3,10 @@
 
 const STORE = {
   items: [
-    {id: cuid(), name: 'apples', checked: false},
-    {id: cuid(), name: 'oranges', checked: false},
-    {id: cuid(), name: 'milk', checked: true},
-    {id: cuid(), name: 'bread', checked: false}
+    {id: cuid(), name: 'apples', checked: false,},
+    {id: cuid(), name: 'oranges', checked: false,},
+    {id: cuid(), name: 'milk', checked: true,},
+    {id: cuid(), name: 'bread', checked: false,}
   ],
   hideCompleted: false,
 };
@@ -32,8 +32,8 @@ function generateShoppingItemsString(shoppingList) {
   return items.join('');
 }
 
-function renderShoppingList() {
-  let filteredItems = STORE.items;
+function renderShoppingList(items) {
+  let filteredItems = items;
   if (STORE.hideCompleted) {
     filteredItems = filteredItems.filter(item => !item.checked);
   }
@@ -42,16 +42,17 @@ function renderShoppingList() {
 }
 
 function addItemToStore(name) {
-  return STORE.items.push({id: cuid(), name: name, checked: false});
+  return STORE.items.push({id: cuid(), name: name, checked: false, searched: false,});
 }
 
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
     event.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
+    if (newItemName === '') {return;}
     $('.js-shopping-list-entry').val('');
     addItemToStore(newItemName);
-    renderShoppingList();
+    renderShoppingList(STORE.items);
   });
 }
 
@@ -92,12 +93,29 @@ function handleToggleHideFilter() {
   });
 }
 
+//Model
+function filterBySearch(name) {
+  return STORE.items.filter(item => item.name.includes(name));
+}
+
+//Controller
+function handleSearchItems() {
+  $('#js-search-form').submit(function(event){
+    event.preventDefault();
+    const searchEntry = $('.js-search-entry').val();
+    const items = filterBySearch(searchEntry);
+    renderShoppingList(items);
+    console.log('searching');
+  });
+}
+
 function handleShoppingList() {
-  renderShoppingList();
+  renderShoppingList(STORE.items);
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleHideFilter();
+  handleSearchItems();
 }
 
 $(handleShoppingList);
