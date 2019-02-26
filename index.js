@@ -96,20 +96,34 @@ function handleToggleHideFilter() {
   });
 }
 
-//Model
 function filterBySearch(name) {
   const searchItems = STORE.items;
   return searchItems.filter(item => item.name.includes(name));
 }
 
-//Controller
 function handleSearchItems() {
   $('#js-search-form').submit(function(event){
     event.preventDefault();
     const searchEntry = $('.js-search-entry').val();
     const searchItems = filterBySearch(searchEntry);
     renderShoppingList(searchItems);
-    console.log('searching');
+  });
+}
+
+function editItemName(oldName, newName) {
+  let itemToEdit = STORE.items.find(item => item.name === oldName );
+  itemToEdit.name = newName;
+  console.log(oldName);
+  console.log(newName);
+  console.log(itemToEdit);
+}
+
+function handleItemEdit() {
+  $('span.js-shopping-item').click(function(event){
+    const newName = prompt('New Item Name:');
+    const oldName = $(event.target).text();
+    editItemName(oldName, newName);
+    renderShoppingList();
   });
 }
 
@@ -120,6 +134,7 @@ function handleShoppingList() {
   handleDeleteItemClicked();
   handleToggleHideFilter();
   handleSearchItems();
+  handleItemEdit();
 }
 
 $(handleShoppingList);
