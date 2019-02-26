@@ -32,8 +32,11 @@ function generateShoppingItemsString(shoppingList) {
   return items.join('');
 }
 
-function renderShoppingList(items) {
-  let filteredItems = items;
+function renderShoppingList(searchItems) {
+  let filteredItems = STORE.items;
+  if (searchItems) {
+    filteredItems = searchItems;
+  }
   if (STORE.hideCompleted) {
     filteredItems = filteredItems.filter(item => !item.checked);
   }
@@ -95,7 +98,8 @@ function handleToggleHideFilter() {
 
 //Model
 function filterBySearch(name) {
-  return STORE.items.filter(item => item.name.includes(name));
+  const searchItems = STORE.items;
+  return searchItems.filter(item => item.name.includes(name));
 }
 
 //Controller
@@ -103,14 +107,14 @@ function handleSearchItems() {
   $('#js-search-form').submit(function(event){
     event.preventDefault();
     const searchEntry = $('.js-search-entry').val();
-    const items = filterBySearch(searchEntry);
-    renderShoppingList(items);
+    const searchItems = filterBySearch(searchEntry);
+    renderShoppingList(searchItems);
     console.log('searching');
   });
 }
 
 function handleShoppingList() {
-  renderShoppingList(STORE.items);
+  renderShoppingList();
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
